@@ -1,0 +1,7 @@
+-> New members joins the server
+    - default Role hides all channels until user joins the rank system
+
+-> Member joins the rank system
+    - create user profile
+    - give proper roles
+    - change nickname based off user rank

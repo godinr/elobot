@@ -1,0 +1,7 @@
+Match
+    - match id
+    - 2 Teams of 5 players
+
+    Team
+        - list of players
+        - score
