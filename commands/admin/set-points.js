@@ -20,6 +20,16 @@ module.exports = {
          */
     async execute(client, interaction){
 
+        const cachedPoints = client.ranks.points;
+        
+        const pointValues = {
+            win: String(cachedPoints.win),
+            loss: String(cachedPoints.loss),
+            kill: String(cachedPoints.kill),
+            death: String(cachedPoints.death),
+            mvp: String(cachedPoints.mvp)
+        }
+
         const pointsModal = new ModalBuilder()
             .setCustomId('set-points')
             .setTitle('Set Rank System Points')
@@ -29,27 +39,32 @@ module.exports = {
             .setCustomId('win')
             .setLabel("win points")
             .setStyle(TextInputStyle.Short)
+            .setValue(pointValues.win)
 
         const lossInput = new TextInputBuilder()
             .setCustomId('loss')
             .setLabel("loss points")
             .setStyle(TextInputStyle.Short)
+            .setValue(pointValues.loss)
         
         
         const killInput = new TextInputBuilder()
             .setCustomId('kills')
             .setLabel("kill points")
             .setStyle(TextInputStyle.Short)
+            .setValue(pointValues.kill)
         
         const deathInput = new TextInputBuilder()
             .setCustomId('deaths')
             .setLabel("death points")
             .setStyle(TextInputStyle.Short)
+            .setValue(pointValues.death)
 
         const mvpInput = new TextInputBuilder()
             .setCustomId('mvp')
             .setLabel("mvp points")
             .setStyle(TextInputStyle.Short)
+            .setValue(pointValues.mvp)
 
         const row1 = new ActionRowBuilder().addComponents(winInput);
         const row2 = new ActionRowBuilder().addComponents(lossInput);

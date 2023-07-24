@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 
 const RankSchema = new Schema({
+    guild_id: String,
     points: {
         win: Number,
         loss: Number,
