@@ -34,21 +34,7 @@ module.exports = {
             .setCustomId('loss')
             .setLabel("loss points")
             .setStyle(TextInputStyle.Short)
-
-        // const cqcWinInput = new TextInputBuilder()
-        //     .setCustomId('cqcwin')
-        //     .setLabel("cqc win points")
-        //     .setStyle(TextInputStyle.Short)
-
-        // const cqcLossInput = new TextInputBuilder()
-        //     .setCustomId('cqcloss')
-        //     .setLabel("cqc loss points")
-        //     .setStyle(TextInputStyle.Short)
         
-        const mvpInput = new TextInputBuilder()
-            .setCustomId('mvp')
-            .setLabel("mvp points")
-            .setStyle(TextInputStyle.Short)
         
         const killInput = new TextInputBuilder()
             .setCustomId('kills')
@@ -60,16 +46,18 @@ module.exports = {
             .setLabel("death points")
             .setStyle(TextInputStyle.Short)
 
-        
-        const row = new ActionRowBuilder().addComponents(winInput);
-        const row1 = new ActionRowBuilder().addComponents(lossInput);
-        //const row2 = new ActionRowBuilder().addComponents(cqcWinInput);
-        //const row3 = new ActionRowBuilder().addComponents(cqcLossInput);
-        const row4 = new ActionRowBuilder().addComponents(mvpInput);
-        const row5 = new ActionRowBuilder().addComponents(killInput);
-        const row6 = new ActionRowBuilder().addComponents(deathInput);
+        const mvpInput = new TextInputBuilder()
+            .setCustomId('mvp')
+            .setLabel("mvp points")
+            .setStyle(TextInputStyle.Short)
 
-        pointsModal.addComponents(row, row1, row4, row5, row6);
+        const row1 = new ActionRowBuilder().addComponents(winInput);
+        const row2 = new ActionRowBuilder().addComponents(lossInput);
+        const row3 = new ActionRowBuilder().addComponents(mvpInput);
+        const row4 = new ActionRowBuilder().addComponents(killInput);
+        const row5 = new ActionRowBuilder().addComponents(deathInput);
+
+        pointsModal.addComponents(row1, row2, row3, row4, row5);
 
         return await interaction.showModal(pointsModal);
         

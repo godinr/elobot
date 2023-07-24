@@ -76,13 +76,13 @@ module.exports = {
             .setStyle(TextInputStyle.Short)
             .setRequired(true);
         
-        const row = new ActionRowBuilder().addComponents(winInput);
-        const row1 = new ActionRowBuilder().addComponents(mvpInput);
-        const row2 = new ActionRowBuilder().addComponents(killInput);
-        const row3 = new ActionRowBuilder().addComponents(deathInput);
-        const row4 = new ActionRowBuilder().addComponents(UserIdInput);
+        const row1 = new ActionRowBuilder().addComponents(winInput);
+        const row2 = new ActionRowBuilder().addComponents(mvpInput);
+        const row3 = new ActionRowBuilder().addComponents(killInput);
+        const row4 = new ActionRowBuilder().addComponents(deathInput);
+        const row5 = new ActionRowBuilder().addComponents(UserIdInput);
 
-        statsModal.addComponents(row, row1, row2, row3, row4);
+        statsModal.addComponents(row1, row2, row3, row4, row5);
 
         return await interaction.showModal(statsModal);
         

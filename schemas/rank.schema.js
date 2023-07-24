@@ -5,11 +5,9 @@ const RankSchema = new Schema({
     points: {
         win: Number,
         loss: Number,
-        cqcWin: Number,
-        cwcLoss: Number,
         kill: Number,
         death: Number,
-        bonus: Number
+        mvp: Number
     },
     ranks: {
         rank_s: Number,
