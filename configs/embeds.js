@@ -1,5 +1,5 @@
 module.exports = {
-    color: 'Gold',
+    color: 'Blue',
     profileAuthor: 'Player Profile',
     footer: 'Elo Bot'
 }

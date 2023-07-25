@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, Client, Interaction, EmbedBuilder } = require('discord.js');
 const UserSchema = require('../../schemas/user.schema');
+const { color, footer } = require('../../configs/embeds');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,11 +15,11 @@ module.exports = {
     async execute(client, interaction){
 
         const joinEmbed = new EmbedBuilder()
-            .setColor(0x0099FF)
+            .setColor(color)
             .setTitle('Join rank system')
             .setAuthor({name: 'Elo', iconURL: client.user.iconURL})
             .setTimestamp()
-            .setFooter({ text: 'Elo bot', iconURL: client.user.iconURL})
+            .setFooter({ text: footer, iconURL: client.user.iconURL})
 
         // check if user is new
         const userId = interaction.member.id;
@@ -50,7 +51,7 @@ module.exports = {
             const userNickname = interaction.member.user.username;
 
             try{
-                await interaction.member.setNickname(`ELO: ${user.rating} | ${userNickname}`);
+                await interaction.member.setNickname(`[${user.rating} ELO] ${userNickname}`);
             }catch(err){
                 console.log('unable to change user nickname')
             }
@@ -59,7 +60,7 @@ module.exports = {
                 // modify user roles
                 await Promise.all([removeUnrankedRole, addRankedRoles]);
                 
-                joinEmbed.setDescription("Rank profile created")
+                joinEmbed.setDescription("✅ | Rank profile created")
                 interaction.reply({embeds: [joinEmbed]})
                 return;
             })

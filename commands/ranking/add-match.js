@@ -9,7 +9,6 @@ const {
 } = require('discord.js');
 
 
-//const UserSchema = require('../../schemas/user.schema');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,8 +28,11 @@ module.exports = {
          * @returns 
          */
     async execute(client, interaction){
+
+        // PERMISSIONS
+
         const userId = interaction.options.getUser('user').id;
-        console.log(userId)
+        
 
         const statsModal = new ModalBuilder()
             .setCustomId('add-match')
