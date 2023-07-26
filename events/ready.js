@@ -27,6 +27,8 @@ module.exports = {
             console.log(client.ranks)
         }
         
+        client.suspensionTimers = new Map();
+        
         console.log('Ready')
     }
 }

@@ -31,16 +31,23 @@ module.exports = {
 
         const profileEmbed = new EmbedBuilder()
             .setColor(color)
-            .setAuthor({ name: profileAuthor, iconURL: client.user.iconURL })
+            .setAuthor({ name: profileAuthor, iconURL: client.user.displayAvatarURL() })
             .setTitle(title)
             .setTimestamp()
-            .setFooter({text: footer, iconURL: client.user.iconURL});
+            .setFooter({text: footer, iconURL: client.user.displayAvatarURL()});
 
         try {
             const user = await UserSchema.findOne({id: userId});
 
             if (!user){
-                return interaction.reply({content: 'Error, unable to locate your profile'});
+                const errorEmbed = new EmbedBuilder()
+                .setColor(color)
+                .setAuthor({ name: profileAuthor, iconURL: client.user.displayAvatarURL() })
+                .setTimestamp()
+                .setFooter({text: footer})
+                .setTitle('❌ No profile linked to the tagged member');
+
+                return interaction.reply({embeds: [errorEmbed]});
             }
 
             const matchs = user.wins + user.losses;

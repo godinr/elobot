@@ -16,17 +16,17 @@ module.exports = {
 
         const joinEmbed = new EmbedBuilder()
             .setColor(color)
-            .setTitle('Join rank system')
-            .setAuthor({name: 'Elo', iconURL: client.user.iconURL})
+            .setAuthor({name: 'Join Rank System', iconURL: client.user.displayAvatarURL()})
             .setTimestamp()
-            .setFooter({ text: footer, iconURL: client.user.iconURL})
+            .setFooter({ text: footer, iconURL: client.user.displayAvatarURL()})
 
         // check if user is new
         const userId = interaction.member.id;
 
         UserSchema.findOne({id: userId}).then(async (res) => {
             if (res){
-                joinEmbed.setDescription('You already have a rank profile, unable to create a new one.')
+                joinEmbed.setTitle('❌ You already have a rank profile.')
+                joinEmbed.setDescription('To reset your account contact Management')
                 interaction.reply({embeds: [joinEmbed]})
                 return;
             }
@@ -39,11 +39,12 @@ module.exports = {
                 wins: 0,
                 losses: 0,
                 kills: 0,
-                deaths: 0
+                deaths: 0,
+                suspended: false
             })
 
-            const rankedRole = interaction.guild.roles.cache.find(r => r.name === 'ranked');
-            const unrankedRole = interaction.guild.roles.cache.find(r => r.name === 'unranked');
+            const rankedRole = interaction.guild.roles.cache.find(r => r.name === 'Ranked');
+            const unrankedRole = interaction.guild.roles.cache.find(r => r.name === 'Unranked');
             const currentRankRole = interaction.guild.roles.cache.find(r => r.name === 'D-');
 
             const removeUnrankedRole = interaction.member.roles.remove(unrankedRole);
@@ -60,7 +61,8 @@ module.exports = {
                 // modify user roles
                 await Promise.all([removeUnrankedRole, addRankedRoles]);
                 
-                joinEmbed.setDescription("✅ | Rank profile created")
+                joinEmbed.setTitle("✅ Profile created");
+                joinEmbed.setDescription("Display profile stats with the command /profile\n\nGood luck on your matches.")
                 interaction.reply({embeds: [joinEmbed]})
                 return;
             })

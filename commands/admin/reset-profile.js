@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, Client, Interaction } = require('discord.js');
+const { SlashCommandBuilder, Client, Interaction, PermissionsBitField } = require('discord.js');
 const UserSchema = require('../../schemas/user.schema');
 
 module.exports = {
@@ -10,7 +10,8 @@ module.exports = {
                 .setName('user')
                 .setDescription('The user\'s profile you want to reset.')
                 .setRequired(true)
-        }),
+        })
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageNicknames),
 
     /**
      * 

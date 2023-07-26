@@ -38,7 +38,7 @@ module.exports = {
 
                 let containsNaN = false;
                 let containsNegativeValues = false;
-                let valuesTooHigh = falase;
+                let valuesTooHigh = false;
 
                 // make sure values are numbers
                 [kills, deaths].forEach((input) => {
@@ -55,16 +55,29 @@ module.exports = {
                     }
                 });
 
+                const errorEmbed = new EmbedBuilder()
+                .setColor(color)
+                .setAuthor({ name: 'Add Match', iconURL: client.user.displayAvatarURL() })
+                .setTimestamp()
+                .setFooter({text: footer});
+
                 if (containsNaN){
-                    return interaction.reply({content: 'Kills & Deaths need to be numbers'});
+                    errorEmbed.setTitle('❌ Kills & Deaths need to be numbers');
+                    //return interaction.reply({content: 'Kills & Deaths need to be numbers'});
                 }
 
                 if (containsNegativeValues){
-                    return interaction.reply({content: 'Kills & deaths must be a positive number'});
+                    errorEmbed.setTitle('❌ Kills & deaths must be a positive number');
+                    //return interaction.reply({content: 'Kills & deaths must be a positive number'});
                 }
 
                 if (valuesTooHigh){
-                    return interaction.reply({content: 'Enter a real number of Kills & deaths'});
+                    errorEmbed.setTitle('❌ Value too high, Enter a real number of Kills & deaths');
+                    //return interaction.reply({content: 'Enter a real number of Kills & deaths'});
+                }
+
+                if (containsNaN || containsNegativeValues || valuesTooHigh){
+                    return interaction.reply({embeds: [errorEmbed]});
                 }
 
                 // init scoring variables
@@ -147,10 +160,10 @@ module.exports = {
 
                     const postMatchEmbed = new EmbedBuilder()
                         .setColor(color)
-                        .setAuthor({ name: 'Post Match Recap'})
+                        .setAuthor({ name: 'Post Match Recap', iconURL: client.user.displayAvatarURL()})
                         .setTitle(`Player: ${guildUser.user.username}`)
                         .setTimestamp()
-                        .setFooter({ text: footer})
+                        .setFooter({ text: footer, iconURL: client.user.displayAvatarURL()})
 
                     const matchResult = newWins > 0 ? 'Won' : 'Lost';
 
@@ -186,7 +199,13 @@ module.exports = {
                 })
 
                 if (containsNaN){
-                    return interaction.reply({content: "All entries must be numbers"})
+                    const errorEmbed = new EmbedBuilder()
+                        .setColor(color)
+                        .setAuthor({ name: 'Set Rank Points', iconURL: client.user.displayAvatarURL() })
+                        .setTimestamp()
+                        .setFooter({text: footer})
+                        .setTitle('❌ All entries must be numbers')
+                    return interaction.reply({embeds: [errorEmbed]});
                 }
 
 

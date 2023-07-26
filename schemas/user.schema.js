@@ -9,7 +9,8 @@ const UserSchema = new Schema({
     wins: Number,
     losses: Number,
     kills: Number,
-    deaths: Number
+    deaths: Number,
+    suspended: Boolean
 });
 
 module.exports = mongoose.model('users', UserSchema);

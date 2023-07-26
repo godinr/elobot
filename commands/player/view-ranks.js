@@ -16,9 +16,9 @@ module.exports = {
         
         const rankEmbed = new EmbedBuilder()
             .setColor(color)
-            .setAuthor({name: 'Ranks'})
+            .setAuthor({name: 'Ranks', iconURL: client.user.displayAvatarURL()})
             .setTimestamp()
-            .setFooter({text: footer});
+            .setFooter({text: footer, iconURL: client.user.displayAvatarURL()});
 
         const ranks = client.ranks.ranks;
         

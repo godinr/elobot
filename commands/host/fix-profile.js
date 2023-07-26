@@ -5,7 +5,8 @@ const {
     ModalBuilder, 
     TextInputBuilder,
     TextInputStyle,
-    ActionRowBuilder
+    ActionRowBuilder,
+    PermissionsBitField
 } = require('discord.js');
 
 const UserSchema = require('../../schemas/user.schema');
@@ -19,7 +20,8 @@ module.exports = {
                 .setName('user')
                 .setDescription('The user\'s profile you want to update.')
                 .setRequired(true)
-        }),
+        })
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.MoveMembers),
 
     /**
      * 

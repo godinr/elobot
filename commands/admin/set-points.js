@@ -5,13 +5,15 @@ const {
     ModalBuilder, 
     TextInputBuilder, 
     TextInputStyle, 
-    Client
+    Client,
+    PermissionsBitField
 } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('set-points')
-        .setDescription('Set points given to users for win, loss, kill, death, mvp.'),
+        .setDescription('Set points given to users for win, loss, kill, death, mvp.')
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageNicknames),
         /**
          * 
          * @param {Client} client 

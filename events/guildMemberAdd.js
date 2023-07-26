@@ -10,7 +10,7 @@ module.exports = {
      */
     async execute(client, member) {
         console.log(`New Guild Member | user: ${member.user.username} | id: ${member.id}`)
-        const unrankedRole = client.guilds.cache.first().roles.cache.find(r => r.name === 'unranked');
+        const unrankedRole = client.guilds.cache.first().roles.cache.find(r => r.name === 'Unranked');
         await member.roles.add(unrankedRole);
     }
 }
