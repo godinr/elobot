@@ -69,6 +69,7 @@ module.exports = {
             // load rank image
             const assetMap = getAssetMap();
             const asset = assetMap.get(user.rank.toLowerCase());
+            
             const file = new AttachmentBuilder(`${asset.path}`);
             profileEmbed.setThumbnail(`attachment://${asset.name}`)
             

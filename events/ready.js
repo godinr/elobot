@@ -16,7 +16,6 @@ module.exports = {
         })
 
 
-        // TODO 
         // hard coded for now
         const guildId = process.env.GUILD_ID;
         console.log(`[Event - Ready] | Env Guild ${guildId}`);

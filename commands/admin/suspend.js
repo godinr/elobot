@@ -32,7 +32,7 @@ module.exports = {
                     { name: '3 day', value: '259200'},
                     { name: '7 day', value: '604800'},
                     { name: '14 day', value: '1209600'},
-                    { name: '28 day', value: '2419200'},
+                    { name: '21 day', value: '1814400'},
 
                 )
         })
@@ -83,11 +83,29 @@ module.exports = {
 
             await Promise.all([addSuspendedRole, rmRankedRole, res])
 
+            const minutes = duration/60;
+            const hours = minutes/60;
+            const days = hours/24;
+            let durationConv = minutes;
+            let durationStr = 'minute';
+            if (hours >= 1){
+                durationConv = hours;
+                durationStr = 'hour';
+            }
+            if (days >= 1){
+                durationConv = days;
+                durationStr = 'day';
+            }
             const suspensionEmbed = new EmbedBuilder()
                 .setColor(color)
                 .setAuthor({ name: 'Player Suspension', iconURL: client.user.displayAvatarURL() })
                 .setTitle(`${suspendedMember.user.username} has been suspended`)
-                .setDescription(`Duration: ${duration} seconds\nReason: ${reason}`)
+                //.setDescription(`Duration: ${String(durationConv)} ${durationStr}\nReason: ${reason}`)
+                .setFields(
+                    { name: 'Duration', value: '\u200B', inline: true },
+                    { name: `${durationConv} ${durationStr}`, value: '\u200B', inline: true },
+                    { name: 'Reason', value: reason }
+                )
                 .setTimestamp()
                 .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
             
