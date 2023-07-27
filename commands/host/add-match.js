@@ -30,11 +30,6 @@ module.exports = {
          */
     async execute(client, interaction){
 
-        // PERMISSIONS
-
-        // if(!interaction.member.roles.cache.find(r => r.name === 'Match Host')){
-        //     return interaction.reply({content: 'Only Match Host can run this command'});
-        // }
 
         const userId = interaction.options.getUser('user').id;
         
