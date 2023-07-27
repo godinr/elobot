@@ -18,7 +18,8 @@ module.exports = {
 
         // TODO 
         // hard coded for now
-        const guildId = "959428632084889620";
+        const guildId = process.env.GUILD_ID;
+        console.log(`[Event - Ready] | Env Guild ${guildId}`);
         
         const ranks = await RankSchema.findOne({guild_id: guildId});
         
