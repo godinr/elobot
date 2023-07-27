@@ -35,8 +35,8 @@ module.exports = {
             const awaitingMatchId = await interaction.guild.channels.cache.find(c => c.name === 'Awaiting Match').id;
             const awaitingMatchVoiceChannel = await interaction.guild.channels.fetch(awaitingMatchId);
             
-            const team1VoiceChannel = await interaction.guild.channels.cache.find(c => c.name === 'Party-Queue 1');
-            const team2VoiceChannel = await interaction.guild.channels.cache.find(c => c.name === 'Party-Queue 2');
+            const team1VoiceChannel = await interaction.guild.channels.cache.find(c => c.name === 'Squad Room 1');
+            const team2VoiceChannel = await interaction.guild.channels.cache.find(c => c.name === 'Squad Room 2');
 
             const matchMembers = [];
 
@@ -65,8 +65,8 @@ module.exports = {
             }
 
             teamEmbed.setFields(
-                { name: 'Party-Queue 1', value: team1, inline: true},
-                { name: 'Party-Queue 2', value: team2, inline: true }
+                { name: 'Squad Room 1', value: team1, inline: true},
+                { name: 'Squad Room 2', value: team2, inline: true }
             );
 
             teamEmbed.setTitle(`${team1Size} vs ${team2Size}`);
