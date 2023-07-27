@@ -14,7 +14,8 @@ const client = new Client({
         GatewayIntentBits.Guilds, 
         GatewayIntentBits.GuildMessages, 
         GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildVoiceStates
     ]
     , rest: {version: '10'}
 });
@@ -27,7 +28,7 @@ async function main() {
     try {
         client.slashCommands = new Collection();
         await registerCommands(client);
-        console.log(client.slashCommands);
+        
 
         const commandsJson = client.slashCommands.map((cmd) => cmd.data.toJSON());
         
@@ -36,13 +37,9 @@ async function main() {
         });
 
         const registeredCommands = await client.rest.get(Routes.applicationGuildCommands(APP_ID, GUILD_ID));
-
         console.log(registeredCommands);
-
         
         await client.login(TOKEN);
-
-        console.log('Bot -> Online')
 
     } catch (err) {
         console.log(err);

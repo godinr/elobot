@@ -10,12 +10,13 @@ module.exports = {
         
 
         mongoose.connect(process.env.MONGO_URL).then(() => {
-            console.log('Connected to MongoDB')
+            console.log('[Event - Ready] | Connected to MongoDB')
         }).catch((err) => {
             console.log(err)
         })
 
 
+        // TODO 
         // hard coded for now
         const guildId = "959428632084889620";
         
@@ -24,11 +25,11 @@ module.exports = {
         // cache rank details
         if (ranks){
             client.ranks = ranks;
-            console.log(client.ranks)
         }
         
+        // create map to cache suspensionTimers
         client.suspensionTimers = new Map();
-        
-        console.log('Ready')
+
+        console.log('[Event - Ready] | Elo Bot Online.')
     }
 }

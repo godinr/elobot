@@ -54,7 +54,7 @@ module.exports = {
             try{
                 await interaction.member.setNickname(`[${user.rating} ELO] ${userNickname}`);
             }catch(err){
-                console.log('unable to change user nickname')
+                console.log('[CMD - Join] | Unable to change user nickname')
             }
 
             user.save().then(async () => {

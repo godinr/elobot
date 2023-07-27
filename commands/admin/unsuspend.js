@@ -31,8 +31,7 @@ module.exports = {
         if (hasActiveTimeout){
             clearTimeout(hasActiveTimeout)
             client.suspensionTimers.delete(unsuspendedMember.id)
-            console.log('timeout cleared');
-            console.log(client.suspensionTimers)
+            console.log('[CMD - Unsuspend] Timeout cleared');
         }
 
         const suspendedRole = interaction.guild.roles.cache.find(r => r.name === 'Suspended')
@@ -49,7 +48,7 @@ module.exports = {
 
         user.suspended = false;
 
-        const res = await user.save();
+        const res = user.save();
 
         await Promise.all([rmSuspendedRole, addRankedRoles, res]);
 

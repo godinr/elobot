@@ -63,21 +63,18 @@ module.exports = {
 
                 if (containsNaN){
                     errorEmbed.setTitle('❌ Kills & Deaths need to be numbers');
-                    //return interaction.reply({content: 'Kills & Deaths need to be numbers'});
                 }
 
                 if (containsNegativeValues){
                     errorEmbed.setTitle('❌ Kills & deaths must be a positive number');
-                    //return interaction.reply({content: 'Kills & deaths must be a positive number'});
                 }
 
                 if (valuesTooHigh){
                     errorEmbed.setTitle('❌ Value too high, Enter a real number of Kills & deaths');
-                    //return interaction.reply({content: 'Enter a real number of Kills & deaths'});
                 }
 
                 if (containsNaN || containsNegativeValues || valuesTooHigh){
-                    return interaction.reply({embeds: [errorEmbed]});
+                    return await interaction.reply({embeds: [errorEmbed]});
                 }
 
                 // init scoring variables
@@ -89,8 +86,8 @@ module.exports = {
                     const user = await UserSchema.findOne({id: userId});
 
                     if (!user){
-                        console.log('No user not found to add match stats');
-                        return interaction.reply({content: "Tagged user does not have a profile"});
+                        console.log('[Event - InteractionCreate - AddMatch] | User not found.');
+                        return await interaction.reply({content: "Tagged user does not have a profile", ephemeral: true});
                     }
 
                     newMatchPlayed++;
@@ -129,11 +126,12 @@ module.exports = {
 
                     const userRank = updateUserRank(client.ranks.ranks, currentRating);
                     
-                    const guildUser = interaction.guild.members.cache.get(userId);
+                    const guildUser = await interaction.guild.members.fetch(userId);
 
                     if (user.rank != userRank) {
                         const currentRankRole = interaction.guild.roles.cache.find(r => r.name === user.rank);
                         const newRankRole = interaction.guild.roles.cache.find(r => r.name === userRank);
+                        
                         const removeCurrentRankRole = guildUser.roles.remove(currentRankRole)
                         const addNewRankRole = guildUser.roles.add(newRankRole)
 
@@ -148,7 +146,7 @@ module.exports = {
                     try{
                         await guildUser.setNickname(`[${user.rating} ELO] ${userNickname}`);
                     }catch(error){
-                        console.log('Permission error | unable to change user nickname')
+                        console.log('[Event - InteractionCreate - AddMatch] | Permission error -> unable to change nickname.');
                     }
 
                     console.log(`USER RANK: ${userRank}`);
@@ -156,7 +154,7 @@ module.exports = {
                     // save changes
                     const res = await user.save();
 
-                    console.log(res);
+                    //console.log(res);
 
                     const postMatchEmbed = new EmbedBuilder()
                         .setColor(color)
@@ -174,7 +172,7 @@ module.exports = {
                         { name: 'Rating received', value: `${matchPoints} pts`}
                     )
                     
-                    return interaction.reply({embeds: [postMatchEmbed]});
+                    return await interaction.reply({embeds: [postMatchEmbed]});
 
                 } catch (err) {
                     console.log(err);
@@ -245,7 +243,7 @@ module.exports = {
                     try {
                         rankPoints.guild_id = guildId;
                         const res = await rankPoints.save();
-                        console.log(res);
+                        //console.log(res);
                         return interaction.reply({content: "Rank points created"})
                     }catch(err){
                         console.log(err);
@@ -263,8 +261,23 @@ module.exports = {
                 console.log(res);
 
                 updateCachedPoints(client, win, loss, kills, deaths, mvp);
+
+                const setPointsEmbed = new EmbedBuilder()
+                    .setColor(color)
+                    .setAuthor({name: 'Match Points Updated', iconURL:client.user.displayAvatarURL()})
+                    .addFields(
+                        { name: 'Win' ,value: String(win), inline: true },
+                        { name: 'Loss' ,value: String(loss), inline: true },
+                        { name: '\u200B', value: '\u200B', inline: true },
+                        { name: 'Mvp' ,value: String(mvp), inline: true },
+                        { name: 'Kill' ,value: String(kills), inline: true },
+                        { name: 'Death' ,value: String(deaths), inline: true },
+                        
+                    )
+                    .setTimestamp()
+                    .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
                 
-                return interaction.reply({content: "Rank points updated"});
+                return await interaction.reply({embeds: [setPointsEmbed]});
             }
 
             if (interaction.customId === 'fix-profile'){
@@ -284,14 +297,14 @@ module.exports = {
                 });
 
                 if(containsNaN){
-                    return interaction.reply({content: 'Values need to be numbers'})
+                    return interaction.reply({content: 'Values need to be numbers', ephemeral: true});
                 }
 
                 try {
                     const user = await UserSchema.findOne({id: userId});
 
                     if (!user){
-                        return interaction.reply({content: 'Tagged user does not have a profile'})
+                        return interaction.reply({content: 'Tagged user does not have a profile', ephemeral: true});
                     }
 
                     const winDiff = wins - user.wins;
@@ -315,11 +328,13 @@ module.exports = {
 
                     const userRank = updateUserRank(client.ranks.ranks, totalRating);
                     
-                    const guildUser = interaction.guild.members.cache.get(userId);
+                    const guildUser = await interaction.guild.members.fetch(userId);
 
                     if (user.rank != userRank) {
                         const currentRankRole = interaction.guild.roles.cache.find(r => r.name === user.rank);
                         const newRankRole = interaction.guild.roles.cache.find(r => r.name === userRank);
+                        
+
                         const removeCurrentRankRole = guildUser.roles.remove(currentRankRole)
                         const addNewRankRole = guildUser.roles.add(newRankRole)
 
@@ -342,9 +357,17 @@ module.exports = {
                     // save changes
                     const res = await user.save();
 
-                    console.log(res);
+                    //console.log(res);
+                    const fixProfileEmbed = new EmbedBuilder()
+                        .setColor(color)
+                        .setAuthor({name: 'Update Player Stats', iconURL:client.user.displayAvatarURL()})
+                        .setTitle(`✅ ${guildUser.user.username} Profile Updated`)
+                        .setDescription(`For detailed stats use /profile @${guildUser.user.username}`)
+                        .setTimestamp()
+                        .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
 
-                    return interaction.reply('Profile updated')
+
+                    return await interaction.reply({embeds: [fixProfileEmbed]})
 
                 } catch (error) {
                     

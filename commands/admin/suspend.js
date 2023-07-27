@@ -79,7 +79,7 @@ module.exports = {
 
             user.suspended = true;
 
-            const res = await user.save();
+            const res = user.save();
 
             await Promise.all([addSuspendedRole, rmRankedRole, res])
 
@@ -91,20 +91,24 @@ module.exports = {
                 .setTimestamp()
                 .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
             
-            console.log('suspended & removed ranked role')
+            console.log(`[CMD - Suspend] | ${suspendedMember.id} suspended & removed ranked role`);
             
             const timer = setTimeout(async () => {
+
                 const rmSuspendedRole = suspendedMember.roles.remove(suspendedRole);
                 const addRankedRole = suspendedMember.roles.add(rankedRole);
                 
                 const user = await userSchema.findOne({id: suspendedMember.id});
                 user.suspended = false;
-                const res = await user.save();
-                await Promise.all([rmSuspendedRole, addRankedRole, res]);
-                suspensionEmbed.setTitle(`${suspendedMember.user.username} has been unsuspended`)
-                suspensionEmbed.setDescription('Player is now able to play matches.\n Please avoid further suspensions.')
+                const res = user.save();
                 
-                console.log('unsuspended & ranked')
+                await Promise.all([rmSuspendedRole, addRankedRole, res]);
+                
+                suspensionEmbed.setTitle(`${suspendedMember.user.username} has been unsuspended`);
+                suspensionEmbed.setDescription('Player is now able to play matches.\n Please avoid further suspensions.');
+                
+                console.log(`[CMD - Suspend] | ${suspendedMember.id} unsuspended & added ranked role`);
+
                 client.suspensionTimers.delete(suspendedMember.id);
                 interaction.channel.send({embeds: [suspensionEmbed]});
             }, duration * 1000)
