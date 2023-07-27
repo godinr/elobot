@@ -43,7 +43,7 @@ module.exports = {
         const user = await UserSchema.findOne({id: unsuspendedMember.id});
 
         if (!user){
-            return interaction.reply({content: 'User not found in DB'});
+            return await interaction.reply({content: 'User not found in DB'});
         }
 
         user.suspended = false;

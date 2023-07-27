@@ -38,7 +38,7 @@ module.exports = {
             rankEmbed.addFields({name: parsedRank, value: String(ranks[rank]), inline: true})
         }
         
-        return interaction.reply({embeds : [rankEmbed]})
+        return await interaction.reply({embeds : [rankEmbed]})
     }
 
 }

@@ -27,8 +27,7 @@ module.exports = {
             if (res){
                 joinEmbed.setTitle('❌ You already have a rank profile.')
                 joinEmbed.setDescription('To reset your account contact Management')
-                interaction.reply({embeds: [joinEmbed]})
-                return;
+                return await interaction.reply({embeds: [joinEmbed]})
             }
             
             const user = new UserSchema({
@@ -62,9 +61,8 @@ module.exports = {
                 await Promise.all([removeUnrankedRole, addRankedRoles]);
                 
                 joinEmbed.setTitle("✅ Profile created");
-                joinEmbed.setDescription("Display profile stats with the command /profile\n\nGood luck on your matches.")
-                interaction.reply({embeds: [joinEmbed]})
-                return;
+                joinEmbed.setDescription("Display profile stats with the command /profile\n\nGood luck on your matches.");
+                return await interaction.reply({embeds: [joinEmbed]});
             })
 
 

@@ -176,7 +176,7 @@ module.exports = {
 
                 } catch (err) {
                     console.log(err);
-                    return interaction.reply({content: "Error trying to locate player account in the db"})
+                    return await interaction.reply({content: "Error trying to locate player account in the db"})
                 }
             }
 
@@ -203,7 +203,7 @@ module.exports = {
                         .setTimestamp()
                         .setFooter({text: footer})
                         .setTitle('❌ All entries must be numbers')
-                    return interaction.reply({embeds: [errorEmbed]});
+                    return await interaction.reply({embeds: [errorEmbed]});
                 }
 
 
@@ -297,14 +297,14 @@ module.exports = {
                 });
 
                 if(containsNaN){
-                    return interaction.reply({content: 'Values need to be numbers', ephemeral: true});
+                    return await interaction.reply({content: 'Values need to be numbers', ephemeral: true});
                 }
 
                 try {
                     const user = await UserSchema.findOne({id: userId});
 
                     if (!user){
-                        return interaction.reply({content: 'Tagged user does not have a profile', ephemeral: true});
+                        return await interaction.reply({content: 'Tagged user does not have a profile', ephemeral: true});
                     }
 
                     const winDiff = wins - user.wins;
@@ -370,7 +370,7 @@ module.exports = {
                     return await interaction.reply({embeds: [fixProfileEmbed]})
 
                 } catch (error) {
-                    
+                    console.log(err)
                 }
             }
         }

@@ -47,12 +47,10 @@ module.exports = {
                 .setFooter({text: footer})
                 .setTitle('❌ No profile linked to the tagged member');
 
-                return interaction.reply({embeds: [errorEmbed]});
+                return await interaction.reply({embeds: [errorEmbed]});
             }
 
-            const matchs = user.wins + user.losses;
             const kd = (user.deaths === 0)? 0 : (user.kills / user.deaths).toFixed(2);
-            //const description = `Match: ${matchs}\nWin: ${user.wins}\nLoss: ${user.losses}\nK/D: ${kd}\nKills: ${user.kills}\nDeaths: ${user.deaths}`;
 
             profileEmbed.addFields(
                 { name: 'Rank', value: user.rank, inline: true},
@@ -64,7 +62,6 @@ module.exports = {
                 { name: 'Kills', value: String(user.kills), inline: true},
                 { name: 'Deaths', value: String(user.deaths), inline: true},
             )
-            //profileEmbed.setDescription(description);
 
             // load rank image
             const assetMap = getAssetMap();
@@ -72,15 +69,12 @@ module.exports = {
             
             const file = new AttachmentBuilder(`${asset.path}`);
             profileEmbed.setThumbnail(`attachment://${asset.name}`)
-            
 
-
-
-            return interaction.reply({embeds: [profileEmbed], files: [file]});
+            return await interaction.reply({embeds: [profileEmbed], files: [file]});
 
         } catch (err) {
             console.log(err);
-            return interaction.reply({content: 'Error while trying to access db profile'})
+            return await interaction.reply({content: 'Error while trying to access db profile'})
         }
     }
 

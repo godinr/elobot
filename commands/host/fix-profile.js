@@ -89,7 +89,7 @@ module.exports = {
             
         }catch(err){
             console.log(err);
-            return interaction.reply({content: 'Error, unable to reset account'})
+            return await interaction.reply({content: 'Error, unable to reset account'})
         }
     }
 }

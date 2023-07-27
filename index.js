@@ -6,7 +6,6 @@ const { Client, Routes, Collection, GatewayIntentBits } = require('discord.js');
 const { TOKEN, APP_ID, GUILD_ID } = process.env;
  const { registerCommands } = require('./utils/registerSlashCommands');
 const { loadClientEvents } = require('./utils/loadEvents');
-// const { loadClientEvents } = require('./util/loadEvents');
 
 
 const client = new Client({

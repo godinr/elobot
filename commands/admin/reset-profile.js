@@ -25,9 +25,11 @@ module.exports = {
 
         try {
             const user = await UserSchema.findOne({id: userId});
+
             if (!user){
-                return interaction.reply({content: 'Error, user account does not exist'});
+                return await interaction.reply({content: 'Error, user account does not exist'});
             }
+
             const prevRank = user.rank;
             user.rank = 'D-';
             user.rating = 0;
@@ -55,10 +57,9 @@ module.exports = {
                 console.log('[CMD - Reset-Profile] | Permission error > unable to change user nickname')
             }
 
-            return interaction.reply({content: `${guildUser.user.username}'s account has been reset.`});
+            return await interaction.reply({content: `${guildUser.user.username}'s account has been reset.`});
         }catch(err){
             console.log(err);
-            return interaction.reply({content: 'Error, unable to reset account'})
         }
     }
 }
