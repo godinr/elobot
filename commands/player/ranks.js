@@ -1,9 +1,8 @@
 const { SlashCommandBuilder, Client, Interaction, EmbedBuilder } = require('discord.js');
-const UserSchema = require('../../schemas/user.schema');
 const { color, footer } = require('../../configs/embeds');
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('view-ranks')
+        .setName('ranks')
         .setDescription('View the points needed for all ranks.'),
 
     /**
