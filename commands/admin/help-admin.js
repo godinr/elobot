@@ -23,8 +23,7 @@ module.exports = {
                 { name: '/reset-profile @player', value: 'Completly reset the tagged player\'s profile'},
                 { name: '/suspend @player [duration] [reason]', value: 'Suspend tagged player, player wont be able to join matches until duration has ended'},
                 { name: '/unsuspend @player', value: 'Unsuspend tagged player before the duration ends'},
-
-
+                { name: '/suspended-players', value: 'List of players with active suspensions and the duration in seconds.'}
             )
             .setTimestamp()
             .setFooter({text: footer, iconURL: client.user.displayAvatarURL()});

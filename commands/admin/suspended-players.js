@@ -1,4 +1,4 @@
-const { Client, Interaction, EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { Client, Interaction, EmbedBuilder, SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const { color, footer} = require('../../configs/embeds');
 const UserSchema = require('../../schemas/user.schema');
 
@@ -6,7 +6,8 @@ module.exports = {
 
     data: new SlashCommandBuilder()
         .setName('suspended-players')
-        .setDescription('List all suspended players'),
+        .setDescription('List all suspended players')
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageNicknames),
 
     /**
      * 

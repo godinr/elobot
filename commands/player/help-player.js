@@ -20,6 +20,7 @@ module.exports = {
             .setFields(
                 { name: '/join', value: 'Create a rank profile in the database.\nAll players will need to use this command once to be eligible play matches'},
                 { name: '/profile @player', value: 'View your profile stats or tagged a player to view their profile stats.'},
+                { name: '/leaderboard', value: 'Leaderboard of top 10 players'},
                 { name: '/view-ranks', value: 'View all the ranks the required elo to get the rank.'},
                 { name: '/about', value: 'Information about Elo bot.'}
             )
