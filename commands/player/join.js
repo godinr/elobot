@@ -58,7 +58,7 @@ module.exports = {
 
             await Promise.all([removeUnrankedRole, addRankedRoles]);
 
-            const res = await user.save()
+            await user.save()
                 
             joinEmbed.setTitle("✅ Profile created");
             joinEmbed.setDescription("Display profile stats with the command /profile\n\nGood luck on your matches.");
