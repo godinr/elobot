@@ -59,12 +59,20 @@ module.exports = {
                 console.log('[CMD - Join] | Unable to change user nickname')
             }
 
-           // await Promise.all([removeUnrankedRole, addRankedRoles]);
-
-            await user.save()
-                
+            // await Promise.all([removeUnrankedRole, addRankedRoles]);
+            const kd = 0.0;
             joinEmbed.setTitle("✅ Profile created");
-            joinEmbed.setDescription("Display profile stats with the command /profile\n\nGood luck on your matches.");
+            joinEmbed.setFields(
+                { name: 'Rank', value: user.rank, inline: true},
+                { name: 'Rating', value: String(user.rating), inline: false},
+                { name: 'Match', value: String(user.match_played), inline: true},
+                { name: 'Wins', value: String(user.wins), inline: true},
+                { name: 'Losses', value: String(user.losses), inline: true},
+                { name: 'K/D', value: String(kd), inline: true},
+                { name: 'Kills', value: String(user.kills), inline: true},
+                { name: 'Deaths', value: String(user.deaths), inline: true},
+            )
+            await user.save()
 
             console.log(`[CMD - Join] id: ${userId}, username: ${interaction.member.user.username}`)
             return await interaction.reply({embeds: [joinEmbed]});
