@@ -26,7 +26,7 @@ module.exports = {
         const teamEmbed = new EmbedBuilder()
             .setColor(color)
             .setAuthor({ name: 'Create Teams', iconURL: client.user.displayAvatarURL()})
-            .setDescription('Players from Awaiting Match will be sorted in 2 different teams\n and moved their teams voice channel')
+            .setDescription('Players from Awaiting Match will be sorted in 2 different teams.\nAll players will be moved to Squad Room 1 & 2 voice channels')
             .setTimestamp()
             .setFooter({ text: footer, iconURL: client.user.displayAvatarURL()});
         
