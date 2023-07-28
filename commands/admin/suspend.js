@@ -78,6 +78,7 @@ module.exports = {
             }
 
             user.suspended = true;
+            user.suspendedTime = parseInt(duration);
 
             const res = user.save();
 
@@ -115,9 +116,11 @@ module.exports = {
 
                 const rmSuspendedRole = suspendedMember.roles.remove(suspendedRole);
                 const addRankedRole = suspendedMember.roles.add(rankedRole);
-                
+
                 const user = await userSchema.findOne({id: suspendedMember.id});
                 user.suspended = false;
+                user.suspendedTime = 0;
+
                 const res = user.save();
                 
                 await Promise.all([rmSuspendedRole, addRankedRole, res]);

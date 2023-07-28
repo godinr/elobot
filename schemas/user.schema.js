@@ -3,6 +3,7 @@ const { Schema } = require('mongoose');
 
 const UserSchema = new Schema({
     id: String,
+    username: String,
     rank: String,
     rating: Number,
     match_played: Number,
@@ -10,7 +11,8 @@ const UserSchema = new Schema({
     losses: Number,
     kills: Number,
     deaths: Number,
-    suspended: Boolean
+    suspended: Boolean,
+    suspendedTime: Number
 });
 
 module.exports = mongoose.model('users', UserSchema);

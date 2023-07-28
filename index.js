@@ -36,7 +36,7 @@ async function main() {
         });
 
         const registeredCommands = await client.rest.get(Routes.applicationGuildCommands(APP_ID, GUILD_ID));
-        console.log(registeredCommands);
+        //console.log(registeredCommands);
         
         await client.login(TOKEN);
 

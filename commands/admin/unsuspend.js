@@ -47,6 +47,7 @@ module.exports = {
         }
 
         user.suspended = false;
+        user.suspendedTime = 0;
 
         const res = user.save();
 

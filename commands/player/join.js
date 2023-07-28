@@ -32,6 +32,7 @@ module.exports = {
             
             const user = new UserSchema({
                 id: userId,
+                username: interaction.member.user.username,
                 rank: 'D-',
                 rating: 0,
                 match_played: 0,
@@ -39,7 +40,8 @@ module.exports = {
                 losses: 0,
                 kills: 0,
                 deaths: 0,
-                suspended: false
+                suspended: false,
+                suspendedTime: 0
             })
 
             const rankedRole = interaction.guild.roles.cache.find(r => r.name === 'Ranked');
