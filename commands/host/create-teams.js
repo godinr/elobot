@@ -72,7 +72,7 @@ module.exports = {
             teamEmbed.setTitle(`${team1Size} vs ${team2Size}`);
 
 
-
+            console.log('[CMD - Create-Teams] | Teams Generated');
             return await interaction.reply({embeds: [teamEmbed]});
 
         }catch(err){

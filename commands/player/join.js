@@ -64,6 +64,8 @@ module.exports = {
                 
             joinEmbed.setTitle("✅ Profile created");
             joinEmbed.setDescription("Display profile stats with the command /profile\n\nGood luck on your matches.");
+
+            console.log(`[CMD - Join] id: ${userId}, username: ${interaction.member.user.username}`)
             return await interaction.reply({embeds: [joinEmbed]});
 
 
