@@ -25,7 +25,7 @@ module.exports = {
             
             for(let i = 0; i < top10.length-1; i++){
                 leaderboardEmbed.addFields(
-                    { name: `${i+1} - ${top10[i].rating} ${top10[i].username}`, value: `${i+2} - ${top10[i+1].rating} ${top10[i+1].username}` }
+                    { name: `${i+1}: [${top10[i].rating} ELO] ${top10[i].username}`, value: `${i+2}: [${top10[i+1].rating} ELO] ${top10[i+1].username}` }
                 )
                 i++;
             }
