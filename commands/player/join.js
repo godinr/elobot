@@ -48,8 +48,9 @@ module.exports = {
             const unrankedRole = interaction.guild.roles.cache.find(r => r.name === 'Unranked');
             const currentRankRole = interaction.guild.roles.cache.find(r => r.name === 'D-');
 
-            const removeUnrankedRole = interaction.member.roles.remove(unrankedRole);
-            const addRankedRoles = interaction.member.roles.add([rankedRole, currentRankRole]);
+            await interaction.member.roles.remove(unrankedRole);
+            await interaction.member.roles.add([rankedRole, currentRankRole]);
+
             const userNickname = interaction.member.user.username;
 
             try{
@@ -58,7 +59,7 @@ module.exports = {
                 console.log('[CMD - Join] | Unable to change user nickname')
             }
 
-            await Promise.all([removeUnrankedRole, addRankedRoles]);
+           // await Promise.all([removeUnrankedRole, addRankedRoles]);
 
             await user.save()
                 
