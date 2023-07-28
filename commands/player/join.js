@@ -56,14 +56,13 @@ module.exports = {
                 console.log('[CMD - Join] | Unable to change user nickname')
             }
 
-            user.save().then(async () => {
-                // modify user roles
-                await Promise.all([removeUnrankedRole, addRankedRoles]);
+            await Promise.all([removeUnrankedRole, addRankedRoles]);
+
+            const res = await user.save()
                 
-                joinEmbed.setTitle("✅ Profile created");
-                joinEmbed.setDescription("Display profile stats with the command /profile\n\nGood luck on your matches.");
-                return await interaction.reply({embeds: [joinEmbed]});
-            })
+            joinEmbed.setTitle("✅ Profile created");
+            joinEmbed.setDescription("Display profile stats with the command /profile\n\nGood luck on your matches.");
+            return await interaction.reply({embeds: [joinEmbed]});
 
 
         })
