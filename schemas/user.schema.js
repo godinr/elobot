@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
+const MatchSchema = require('./match.schema');
 
 const UserSchema = new Schema({
     id: String,
@@ -12,7 +13,8 @@ const UserSchema = new Schema({
     kills: Number,
     deaths: Number,
     suspended: Boolean,
-    suspendedTime: Number
+    suspendedTime: Number,
+    matches: [MatchSchema]
 });
 
 module.exports = mongoose.model('users', UserSchema);

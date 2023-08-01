@@ -38,6 +38,7 @@ module.exports = {
             user.losses = 0;
             user.kills = 0;
             user.deaths = 0;
+            user.matches = [];
 
             //manage roles
             const guildUser = await interaction.guild.members.fetch(userId);

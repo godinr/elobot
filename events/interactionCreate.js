@@ -151,6 +151,15 @@ module.exports = {
                         
                     }
 
+                    const mathchWon = newWins > 0 ? true : false;
+                    
+                    user.matches.push({
+                        elo: newRating,
+                        win: mathchWon,
+                        kills: newKills,
+                        deaths: newDeaths,
+                    });
+
                     const username = guildUser.user.username;
                 
                     if (guildUser.permissions.has('ManageNicknames')){
