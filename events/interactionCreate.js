@@ -4,6 +4,7 @@ const UserSchema = require('../schemas/user.schema');
 const { updateCachedPoints } = require('../utils/cache/ranks/updateCache');
 const { updateUserRank } = require('../utils/update/userRank');
 const { color, footer } = require('../configs/embeds');
+const { displayDifference } = require('../utils/displayDifference');
 
 module.exports = {
     once: false,
@@ -90,6 +91,15 @@ module.exports = {
                         return await interaction.reply({content: "Tagged user does not have a profile", ephemeral: true});
                     }
 
+                    const guildUser = await interaction.guild.members.fetch(userId);
+                    
+                    const postMatchEmbed = new EmbedBuilder()
+                    .setColor(color)
+                    .setAuthor({ name: 'Post Match Recap', iconURL: client.user.displayAvatarURL()})
+                    .setTitle(`${guildUser.user.username}`)
+                    .setTimestamp()
+                    .setFooter({ text: footer, iconURL: client.user.displayAvatarURL()})
+
                     newMatchPlayed++;
 
                     if (winMatch.toLowerCase() === 'y'){
@@ -126,9 +136,9 @@ module.exports = {
 
                     const userRank = updateUserRank(client.ranks.ranks, currentRating);
                     
-                    const guildUser = await interaction.guild.members.fetch(userId);
 
                     if (user.rank != userRank) {
+                        postMatchEmbed.setDescription(`**Rank Changed**: ${userRank}`);
                         const currentRankRole = interaction.guild.roles.cache.find(r => r.name === user.rank);
                         const newRankRole = interaction.guild.roles.cache.find(r => r.name === userRank);
                         
@@ -141,41 +151,39 @@ module.exports = {
                         
                     }
 
-                    const userNickname = guildUser.user.username;
+                    const username = guildUser.user.username;
                 
-                    try{
-                        await guildUser.setNickname(`[${user.rating} ELO] ${userNickname}`);
-                    }catch(error){
-                        console.log('[Event - InteractionCreate - AddMatch] | Permission error -> unable to change nickname.');
+                    if (guildUser.permissions.has('ManageNicknames')){
+                        console.log('[CMD - IC - Add-Match] | Unable to change user nickname');
+                        
+                    }else {
+                        await guildUser.setNickname(`[${user.rating} ELO] ${username}`);
+                        console.log('[CMD - IC - Add-Match] | Changed user nickname')
                     }
 
-                    console.log(`USER RANK: ${userRank}`);
+                    console.log(`[CMD - IC - Add-Match] | ${username} has ranked up to ${userRank}`);
 
                     // save changes
-                    const res = await user.save();
+                    await user.save();
 
-                    //console.log(res);
-
-                    const postMatchEmbed = new EmbedBuilder()
-                        .setColor(color)
-                        .setAuthor({ name: 'Post Match Recap', iconURL: client.user.displayAvatarURL()})
-                        .setTitle(`Player: ${guildUser.user.username}`)
-                        .setTimestamp()
-                        .setFooter({ text: footer, iconURL: client.user.displayAvatarURL()})
 
                     const matchResult = newWins > 0 ? 'Won' : 'Lost';
+                    const kd = newDeaths > 0 ? (newKills / newDeaths).toFixed(2) : 0.0;
+                    const mvpStr = mvp.toLowerCase() === 'y' ? 'Yes' : 'No';
 
                     postMatchEmbed.setFields(
-                        { name: `Match ${matchResult}`, value: '\u200B'},
-                        { name: `kills`, value: String(newKills), inline: true},
-                        { name: `Deaths`, value: String(newDeaths), inline: true},
-                        { name: 'Rating received', value: `${matchPoints} pts`}
+                        { name: 'Match', value:  `${matchResult}`, inline: true},
+                        { name: 'Rating', value: `${matchPoints} elo`, inline: true},
+                        { name: 'Mvp', value: `${mvpStr}`, inline: true},
+                        { name: 'kills', value: String(newKills), inline: true},
+                        { name: 'Deaths', value: String(newDeaths), inline: true},
+                        { name: 'K/D', value: `${kd}`, inline: true}
                     )
                     
                     return await interaction.reply({embeds: [postMatchEmbed]});
 
                 } catch (err) {
-                    console.log(err);
+                    console.error(err);
                     return await interaction.reply({content: "Error trying to locate player account in the db"})
                 }
             }
@@ -312,13 +320,11 @@ module.exports = {
                     const killsDiff = kills - user.kills;
                     const deathDiff = deaths - user.deaths;
 
-                    console.log(winDiff, lossesDiff, killsDiff, deathDiff)
-
                     const cachedPoints = client.ranks.points;
                     
                     const updatedRatingPoints = (winDiff * cachedPoints.win) + (lossesDiff * cachedPoints.loss) + (killsDiff * cachedPoints.kill) + (deathDiff * cachedPoints.death);
                     const totalRating = user.rating + updatedRatingPoints;
-                    console.log('total rating: ' + totalRating)
+                    
                     user.rating = totalRating;
                     user.wins = wins;
                     user.losses = losses;
@@ -344,29 +350,35 @@ module.exports = {
                         
                     }
 
-                    const userNickname = guildUser.user.username;
+                    const username = guildUser.user.username;
                 
-                    try{
-                        await guildUser.setNickname(`[${user.rating} ELO] ${userNickname}`);
-                    }catch(error){
-                        console.log('Permission error | unable to change user nickname')
+                    if (guildUser.permissions.has('ManageNicknames')){
+                        console.log('[CMD - IC - Fix-Profile] | Unable to change user nickname');
+                        
+                    }else {
+                        await guildUser.setNickname(`[${user.rating} ELO] ${username}`);
+                        console.log('[CMD - IC - Fix-Prolile] | Changed user nickname')
                     }
 
-                    console.log(`USER RANK: ${userRank}`);
+                    console.log(`[CMD - IC - Fix-Profile] | ${username} has ranked up to ${userRank}`);
 
-                    // save changes
-                    const res = await user.save();
-
-                    //console.log(res);
                     const fixProfileEmbed = new EmbedBuilder()
                         .setColor(color)
                         .setAuthor({name: 'Update Player Stats', iconURL:client.user.displayAvatarURL()})
                         .setTitle(`✅ ${guildUser.user.username} Profile Updated`)
-                        .setDescription(`For detailed stats use /profile @${guildUser.user.username}`)
+                        .addFields(
+                            { name: 'Rating', value: `${displayDifference(totalRating, updatedRatingPoints)}`, inline: true},
+                            { name: 'Wins', value: `${displayDifference(wins, winDiff)}`, inline: true},
+                            { name: 'Losses', value: `${displayDifference(losses, lossesDiff)}`, inline: true},
+                            { name: 'Kills', value: `${displayDifference(kills, killsDiff)}`, inline: true},
+                            { name: 'Deaths', value: `${displayDifference(deaths, deathDiff)}`, inline: true},
+                        )
                         .setTimestamp()
                         .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
 
-
+                    // save changes
+                    await user.save();
+                    
                     return await interaction.reply({embeds: [fixProfileEmbed]})
 
                 } catch (error) {

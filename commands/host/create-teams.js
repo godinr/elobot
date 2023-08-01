@@ -32,11 +32,11 @@ module.exports = {
         
         
         try {
-            const awaitingMatchId = await interaction.guild.channels.cache.find(c => c.name === 'Awaiting Match').id;
+            const awaitingMatchId = interaction.guild.channels.cache.find(c => c.name === 'Awaiting Match').id;
             const awaitingMatchVoiceChannel = await interaction.guild.channels.fetch(awaitingMatchId);
             
-            const team1VoiceChannel = await interaction.guild.channels.cache.find(c => c.name === 'Squad Room 1');
-            const team2VoiceChannel = await interaction.guild.channels.cache.find(c => c.name === 'Squad Room 2');
+            const team1VoiceChannel = interaction.guild.channels.cache.find(c => c.name === 'Squad Room 1');
+            const team2VoiceChannel = interaction.guild.channels.cache.find(c => c.name === 'Squad Room 2');
 
             const matchMembers = [];
 

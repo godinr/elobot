@@ -16,7 +16,7 @@ module.exports = {
         const playerEmbed = new EmbedBuilder()
             .setColor(color)
             .setAuthor({name: 'Information about Elo bot', iconURL: client.user.displayAvatarURL()})
-            .setDescription('This bot was built exclusively for Apocalypse Rising: Matchmaking Discord Server.')
+            .setDescription('**Built exclusively for Apocalypse Rising: Matchmaking Discord Server.**')
             .setFields(
                 { name: 'Elo', value: 'After each match, a match host will update your profile with you match stats'},
                 { name: 'Ranks', value: 'Each rank needs a set amount of elo to get promoted'},

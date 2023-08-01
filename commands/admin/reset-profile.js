@@ -39,7 +39,6 @@ module.exports = {
             user.kills = 0;
             user.deaths = 0;
 
-            const res = user.save();
             //manage roles
             const guildUser = await interaction.guild.members.fetch(userId);
             const prevRankRole = interaction.guild.roles.cache.find(r => r.name === prevRank);
@@ -47,17 +46,22 @@ module.exports = {
             const removeOldRankRole = guildUser.roles.remove(prevRankRole);
             const addNewRankRole = guildUser.roles.add(newRankRole);
 
-            await Promise.all([removeOldRankRole, addNewRankRole, res]);
+            await Promise.all([removeOldRankRole, addNewRankRole]);
 
             //update nickname
-            const userNickname = guildUser.user.username;
-            try{
-                await guildUser.setNickname(`[0 ELO] ${userNickname}`);
-            }catch(error){
-                console.log('[CMD - Reset-Profile] | Permission error > unable to change user nickname')
+            const username = guildUser.user.username;
+
+            if (guildUser.permissions.has('ManageNicknames')){
+                        console.log('[CMD - Reset-Profile] | Unable to change user nickname');
+                        
+            }else {
+                await guildUser.setNickname(`[${user.rating} ELO] ${username}`);
+                console.log('[CMD - Reset-Profile] | Changed user nickname')
             }
 
-            return await interaction.reply({content: `${guildUser.user.username}'s account has been reset.`});
+            await user.save();
+
+            return await interaction.reply({content: `${username}'s account has been reset.`});
         }catch(err){
             console.log(err);
         }

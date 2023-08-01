@@ -74,7 +74,7 @@ module.exports = {
 
         } catch (err) {
             console.log(err);
-            return await interaction.reply({content: 'Error while trying to access db profile'})
+            //return await interaction.reply({content: 'Error while trying to access db profile'})
         }
     }
 

@@ -19,11 +19,12 @@ module.exports = {
             .setAuthor({name: 'Admin Commands', iconURL: client.user.displayAvatarURL()})
             .setDescription('These commands are only available for admin / management roles')
             .setFields(
-                { name: '/set-points', value: 'Modify points for wins, losses, kills, deaths and mvp'},
-                { name: '/reset-profile @player', value: 'Completly reset the tagged player\'s profile'},
-                { name: '/suspend @player [duration] [reason]', value: 'Suspend tagged player, player wont be able to join matches until duration has ended'},
+                { name: '/set-points', value: 'Modify points given to players after wins, losses, kills, deaths and mvp'},
+                { name: '/reset-profile @player', value: 'Reset the tagged player\'s profile, this will reset all the stats to 0.'},
+                { name: '/suspend @player [duration] [reason]', value: 'Suspend tagged player, player wont be able to join matches until suspension duration has ended'},
                 { name: '/unsuspend @player', value: 'Unsuspend tagged player before the duration ends'},
-                { name: '/suspended-players', value: 'List of players with active suspensions and the duration in seconds.'}
+                { name: '/suspended-players', value: 'List of players with active suspensions and the duration in seconds.'},
+                { name: '/player-count', value: 'Total rank players count'}
             )
             .setTimestamp()
             .setFooter({text: footer, iconURL: client.user.displayAvatarURL()});

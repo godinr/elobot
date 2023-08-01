@@ -1,6 +1,4 @@
 require('dotenv').config();
-const fs = require('node:fs');
-const path = require('node:path');
 
 const { Client, Routes, Collection, GatewayIntentBits } = require('discord.js');
 const { TOKEN, APP_ID, GUILD_ID } = process.env;
@@ -18,6 +16,11 @@ const client = new Client({
     ]
     , rest: {version: '10'}
 });
+
+process.on('uncaughtException', err => {
+    console.log(err);
+    process.exit(1);
+})
 
 client.rest.setToken(TOKEN);
 

@@ -20,6 +20,7 @@ module.exports = {
             .setAuthor({name: 'Leaderboard - Top 10 Player\'s', iconURL: client.user.displayAvatarURL()})
             .setTimestamp()
             .setFooter({text: footer, iconURL: client.user.displayAvatarURL()});
+            
         try {
             const top10 = await UserSchema.find().sort({rating: -1}).limit(10);
             
@@ -36,8 +37,5 @@ module.exports = {
             console.log('[CMD - Leaderboard] | Catch Error')
             console.log(err);
         }
-        
-
-        return await interaction.reply('leaderboard test');
     }
 }

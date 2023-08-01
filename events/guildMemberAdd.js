@@ -25,10 +25,11 @@ module.exports = {
             const rankedRole = member.guild.roles.cache.find(r => r.name === 'Ranked')
 
 
-            try {
-                await member.setNickname(`[${user.rating} ELO] ${member.user.username}`)
-            } catch (error) {
-                console.log('[Event - GuildMemberAdd] | Unable to change member nickname.')
+            if (member.permissions.has('ManageNicknames')){
+                console.log('[CMD - Join] | Unable to change user nickname');
+            }else {
+                await member.setNickname(`[${user.rating} ELO] ${member.user.username}`);
+                console.log(`Nickname changed to [${user.rating} ELO] ${member.user.username}`);
             }
 
             if (user.suspended){
@@ -44,9 +45,6 @@ module.exports = {
             console.log('[Event - GuildMemberAdd] | Error giving roles.');
             console.log(err);
         }
-        
-        
-        
         
     }
 }
