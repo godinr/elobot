@@ -45,11 +45,18 @@ module.exports = {
 
                 let matchCount = 0;
                 let winString = '', timeString = '', dateString = '', dateTitle = '', eloString = '';
+                let totalWins = 0, totalElo = 0, totalkd = 0, totalKills = 0, totalDeaths = 0;
                 
                 for(let i = matches.length-1; i >= 0; i--){
                     
                     if (matchCount === 6) break;
                     
+                    totalWins += matches[i].win ? 1 : 0;
+                    totalElo += matches[i].elo;
+                    totalKills += matches[i].kills;
+                    totalDeaths += matches[i].deaths;
+                    totalkd = totalDeaths === 0 ? totalKills : (totalKills/totalDeaths).toFixed(2);
+
                     winString = matches[i].win ? "Win" : "Loss";
                     dateString = matches[i].createdAt.toLocaleDateString().split('-').splice(1).join('/');
                     timeString = matches[i].createdAt.toLocaleTimeString().split(':').splice(0,2).join(':')
@@ -59,9 +66,12 @@ module.exports = {
                     matchesEmbed.addFields(
                         { name: `${winString}`, value: `${dateTitle}\nelo: ${eloString}\nkills: **${matches[i].kills}**\ndeaths: **${matches[i].deaths}**`, inline: true }
                     )
-
+                    
+                    const matchPlayed = matchCount+1;
+                    matchesEmbed.setDescription(`Last **${matchPlayed}** matches\nWins: **${totalWins}**, Elo: **${totalElo}**, K/D: **${totalkd}**`);  
                     matchCount++;
                 }
+
 
                 await interaction.reply({embeds: [matchesEmbed]});
 
