@@ -11,6 +11,7 @@ module.exports = {
         const pointsEmbed = new EmbedBuilder()
             .setColor(color)
             .setAuthor({name: 'Points', iconURL: client.user.displayAvatarURL()})
+            .setDescription('Points awarded to players after each match')
             .setTimestamp()
             .setFooter({text: footer, iconURL: client.user.displayAvatarURL()});
 
@@ -28,6 +29,8 @@ module.exports = {
             
             pointsEmbed.addFields({name: point, value: String(points[point][1]), inline: true})
         }
+
+        pointsEmbed.addFields({name: '\u200B', value: '\u200B', inline: true})
 
         return await interaction.reply({embeds : [pointsEmbed]});
     }

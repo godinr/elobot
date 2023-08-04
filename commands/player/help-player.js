@@ -23,6 +23,7 @@ module.exports = {
                 { name: '/matches @player', value: 'View your last matches or tag a player to view their last matches.'},
                 { name: '/leaderboard', value: 'Leaderboard of top 10 players'},
                 { name: '/ranks', value: 'View all the ranks, and the required elo to get the rank.'},
+                { name: '/points', value: 'View all the points awarded to players after each match.'},
                 { name: '/about', value: 'Information about Elo bot.'}
             )
             .setTimestamp()

@@ -179,10 +179,10 @@ module.exports = {
                     const matchResult = newWins > 0 ? 'Won' : 'Lost';
                     const kd = newDeaths > 0 ? (newKills / newDeaths).toFixed(2) : 0.0;
                     const mvpStr = mvp.toLowerCase() === 'y' ? 'Yes' : 'No';
-
+                    const eloStr = matchPoints > 0 ? `**⬆|Elo**` : `**⬇|Elo**`;
                     postMatchEmbed.setFields(
                         { name: 'Match', value:  `${matchResult}`, inline: true},
-                        { name: 'Rating', value: `${matchPoints} elo`, inline: true},
+                        { name: eloStr, value: `${matchPoints}`, inline: true},
                         { name: 'Mvp', value: `${mvpStr}`, inline: true},
                         { name: 'kills', value: String(newKills), inline: true},
                         { name: 'Deaths', value: String(newDeaths), inline: true},
