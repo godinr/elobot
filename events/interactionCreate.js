@@ -413,7 +413,7 @@ module.exports = {
                     return await interaction.reply({embeds: [fixProfileEmbed]})
 
                 } catch (error) {
-                    console.log(err)
+                    console.log(error)
                 }
             }
         }
