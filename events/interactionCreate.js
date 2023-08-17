@@ -162,8 +162,8 @@ module.exports = {
 
                     const username = guildUser.user.username;
                 
-                    if (guildUser.permissions.has('ManageNicknames')){
-                        console.log('[CMD - IC - Add-Match] | Unable to change user nickname');
+                    if (guildUser.permissions.has('Administrator')){
+                        console.log('[CMD - IC - Add-Match] | Admin unable to change user nickname');
                         
                     }else {
                         await guildUser.setNickname(`[${user.rating} ELO] ${username}`);
@@ -307,14 +307,33 @@ module.exports = {
                 const deaths = parseInt(interaction.fields.getTextInputValue('deaths'));
 
                 let containsNaN = false;
+                let containsNegativeValues = false;
+                let valuesTooHigh = false;
+
                 [wins, losses, kills, deaths].forEach((input) => {
                     if (isNaN(input)){
                         containsNaN = true;
+                    }
+
+                    if (input < 0){
+                        containsNegativeValues = true;
+                    }
+
+                    if (input >= 100){
+                        valuesTooHigh = true;
                     }
                 });
 
                 if(containsNaN){
                     return await interaction.reply({content: 'Values need to be numbers', ephemeral: true});
+                }
+
+                if (containsNegativeValues){
+                    return await interaction.reply({content: 'Values need to be positive', ephemeral: true});
+                }
+
+                if (valuesTooHigh){
+                    return await interaction.reply({content: 'Values too high', ephemeral: true});
                 }
 
                 try {
@@ -363,8 +382,9 @@ module.exports = {
 
                     const username = guildUser.user.username;
                 
-                    if (guildUser.permissions.has('ManageNicknames')){
-                        console.log('[CMD - IC - Fix-Profile] | Unable to change user nickname');
+
+                    if (guildUser.permissions.has('Administrator')){
+                        console.log('[CMD - IC - Fix-Profile] | Admin, Unable to change user nickname');
                         
                     }else {
                         await guildUser.setNickname(`[${user.rating} ELO] ${username}`);
