@@ -334,6 +334,8 @@ module.exports = {
                     const updatedRatingPoints = (winDiff * cachedPoints.win) + (lossesDiff * cachedPoints.loss) + (killsDiff * cachedPoints.kill) + (deathDiff * cachedPoints.death);
                     const totalRating = user.rating + updatedRatingPoints;
                     
+                    if (totalRating < 0) totalRating = 0;
+
                     user.rating = totalRating;
                     user.wins = wins;
                     user.losses = losses;

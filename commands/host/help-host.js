@@ -22,6 +22,9 @@ module.exports = {
                 { name: '/create-teams', value: 'Generate teams when 2 or more players are connected to Awaiting Match voice channel.\nWill also move the players in the assigned Squad Room 1 & Squad Room 2.'},
                 { name: '/add-match @player', value: 'Add post match stats to tagged player\'s profile. This command should be used after each match for each player'},
                 { name: '/fix-profile @player', value: 'Adjust win, loss, kills, deaths of tagged player\'s profile.'},
+                { name: '/suspend @player [duration] [reason]', value: 'Suspend tagged player, player wont be able to join matches until suspension duration has ended'},
+                { name: '/unsuspend @player', value: 'Unsuspend tagged player before the duration ends'},
+                { name: '/suspended-players', value: 'List of players with active suspensions and the duration in seconds.'},
 
 
             )
