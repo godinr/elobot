@@ -37,6 +37,7 @@ module.exports = {
 
             list.forEach((user) => {
                 suspension = user.suspensions[user.suspensions.length-1];
+                console.log(suspension)
                 suspendedMembersEmbed.addFields(
                     { 
                         name: `${user.username}`, 
