@@ -167,7 +167,7 @@ module.exports = {
                         
                     }else {
                         await guildUser.setNickname(`[${user.rating} ELO] ${username}`);
-                        console.log('[CMD - IC - Add-Match] | Changed user nickname')
+                        console.log(`[CMD - IC - Add-Match] | Changed ${username} nickname`)
                     }
 
                     console.log(`[CMD - IC - Add-Match] | ${username} has ranked up to ${userRank}`);
@@ -319,7 +319,7 @@ module.exports = {
                         containsNegativeValues = true;
                     }
 
-                    if (input >= 100){
+                    if (input >= 1000){
                         valuesTooHigh = true;
                     }
                 });

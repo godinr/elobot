@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField} = require('discord.js');
 const { color, footer } = require('../../configs/embeds');
 const userSchema = require('../../schemas/user.schema');
+const { numberTimeToText } = require('../../utils/conversion/timeConversion');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,103 +40,102 @@ module.exports = {
         .addStringOption(option => {
             return option
                 .setName('reason')
-                .setDescription('readon for the suspension')
+                .setDescription('reason for the suspension')
         })
         .setDefaultMemberPermissions(PermissionsBitField.Flags.MoveMembers),
 
         async execute (client, interaction){
 
-            const suspendedUser = interaction.options.getUser('user');
-            const suspendedMember = await interaction.guild.members.fetch(suspendedUser.id);
-            const duration = interaction.options.getString('duration');
-            const reason = interaction.options.getString('reason') || 'none';
+            try {
+                const suspendedUser = interaction.options.getUser('user');
+                const suspendedMember = await interaction.guild.members.fetch(suspendedUser.id);
+                const duration = interaction.options.getString('duration');
+                const reason = interaction.options.getString('reason') || 'none';
 
-            if (!suspendedMember){
-                return await interaction.reply({content: 'The user mentioned is not in the server', ephemeral: true});
-            }
+                if (!suspendedMember){
+                    return await interaction.reply({content: 'The user mentioned is not in the server', ephemeral: true});
+                }
 
-            if (!suspendedMember.kickable){
-                return await interaction.reply({content: 'Cant suspend this user due to permissions', ephemeral: true});
-            }
+                if (!suspendedMember.kickable){
+                    return await interaction.reply({content: 'Cant suspend this user due to permissions', ephemeral: true});
+                }
 
-            if (interaction.member.id === suspendedMember.id){
-                return await interaction.reply({content: 'Cant suspend yourself', ephemeral: true});
-            }
+                if (interaction.member.id === suspendedMember.id){
+                    return await interaction.reply({content: 'Cant suspend yourself', ephemeral: true});
+                }
 
-            if (suspendedMember.permissions.has(PermissionsBitField.Flags.Administrator)) {
-                return await interaction.reply({ content: 'Cant suspend a admin member', ephemeral: true});
-            }
+                if (suspendedMember.permissions.has(PermissionsBitField.Flags.Administrator)) {
+                    return await interaction.reply({ content: 'Cant suspend a admin member', ephemeral: true});
+                }
 
-            const suspendedRole = interaction.guild.roles.cache.find(r => r.name === 'Suspended')
-            const rankedRole = interaction.guild.roles.cache.find(r => r.name === 'Ranked')
-            const addSuspendedRole = suspendedMember.roles.add(suspendedRole);
-            const rmRankedRole = suspendedMember.roles.remove(rankedRole);
-
-            const user = await userSchema.findOne({id: suspendedMember.id});
-
-            if (!user){
-                return interaction.reply({content: 'User not found in DB'})
-            }
-
-            user.suspended = true;
-            user.suspendedTime = parseInt(duration);
-
-            const res = user.save();
-
-            await Promise.all([addSuspendedRole, rmRankedRole, res])
-
-            const minutes = duration/60;
-            const hours = minutes/60;
-            const days = hours/24;
-            let durationConv = minutes;
-            let durationStr = 'minute';
-            if (hours >= 1){
-                durationConv = hours;
-                durationStr = 'hour';
-            }
-            if (days >= 1){
-                durationConv = days;
-                durationStr = 'day';
-            }
-            const suspensionEmbed = new EmbedBuilder()
-                .setColor(color)
-                .setAuthor({ name: 'Player Suspension', iconURL: client.user.displayAvatarURL() })
-                .setTitle(`${suspendedMember.user.username} has been suspended`)
-                //.setDescription(`Duration: ${String(durationConv)} ${durationStr}\nReason: ${reason}`)
-                .setFields(
-                    { name: 'Duration', value: '\u200B', inline: true },
-                    { name: `${durationConv} ${durationStr}`, value: '\u200B', inline: true },
-                    { name: 'Reason', value: reason }
-                )
-                .setTimestamp()
-                .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
-            
-            console.log(`[CMD - Suspend] | ${suspendedMember.id} suspended & removed ranked role`);
-            
-            const timer = setTimeout(async () => {
-
-                const rmSuspendedRole = suspendedMember.roles.remove(suspendedRole);
-                const addRankedRole = suspendedMember.roles.add(rankedRole);
+                const suspendedRole = interaction.guild.roles.cache.find(r => r.name === 'Suspended')
+                const rankedRole = interaction.guild.roles.cache.find(r => r.name === 'Ranked')
+                const addSuspendedRole = suspendedMember.roles.add(suspendedRole);
+                const rmRankedRole = suspendedMember.roles.remove(rankedRole);
 
                 const user = await userSchema.findOne({id: suspendedMember.id});
-                user.suspended = false;
-                user.suspendedTime = 0;
+
+                if (!user){
+                    return interaction.reply({content: 'User not found in DB'})
+                }
+
+                const list = user.suspensions;
+                list.push({
+                    suspendedTime: parseInt(duration),
+                    suspendedDate: new Date().toLocaleString(),
+                    suspendedReason: reason
+                });
+        
+                user.suspended = true;
+                user.suspensions = list; 
 
                 const res = user.save();
-                
-                await Promise.all([rmSuspendedRole, addRankedRole, res]);
-                
-                suspensionEmbed.setTitle(`${suspendedMember.user.username} has been unsuspended`);
-                suspensionEmbed.setDescription('Player is now able to play matches.\n Please avoid further suspensions.');
-                
-                console.log(`[CMD - Suspend] | ${suspendedMember.id} unsuspended & added ranked role`);
 
-                client.suspensionTimers.delete(suspendedMember.id);
-                interaction.channel.send({embeds: [suspensionEmbed]});
-            }, duration * 1000)
+                await Promise.all([addSuspendedRole, rmRankedRole, res])
 
-            client.suspensionTimers.set(suspendedMember.id, timer);
-            return await interaction.reply({embeds: [suspensionEmbed]});
+                const suspensionEmbed = new EmbedBuilder()
+                    .setColor(color)
+                    .setAuthor({ name: 'Player Suspension', iconURL: client.user.displayAvatarURL() })
+                    .setTitle(`${suspendedMember.user.username} has been suspended`)
+                    .setDescription('Player is not able to play matches for the duration of the suspension.')
+                    .setFields(
+                        { name: 'Duration', value: `${numberTimeToText(duration)}`, inline: true },
+                        { name: 'Reason', value: reason }
+                    )
+                    .setTimestamp()
+                    .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
+                
+                console.log(`[CMD - Suspend] | ${suspendedMember.id} suspended & removed ranked role`);
+                
+                const timer = setTimeout(async () => {
+
+                    const rmSuspendedRole = suspendedMember.roles.remove(suspendedRole);
+                    const addRankedRole = suspendedMember.roles.add(rankedRole);
+
+                    const user = await userSchema.findOne({id: suspendedMember.id});
+                    user.suspended = false;
+                    //user.suspendedTime = 0;
+
+                    const res = user.save();
+                    
+                    await Promise.all([rmSuspendedRole, addRankedRole, res]);
+                    
+                    suspensionEmbed.setTitle(`${suspendedMember.user.username} has been unsuspended`);
+                    suspensionEmbed.setDescription('Player is now able to play matches.\n Please avoid further suspensions.');
+                    
+                    console.log(`[CMD - Suspend] | ${suspendedMember.id} unsuspended & added ranked role`);
+
+                    client.suspensionTimers.delete(suspendedMember.id);
+                    interaction.channel.send({embeds: [suspensionEmbed]});
+                }, duration * 1000)
+
+                client.suspensionTimers.set(suspendedMember.id, timer);
+                return await interaction.reply({embeds: [suspensionEmbed]});
+        
+            }catch(err){
+                console.log('[CMD - Suspend] | Catch Error')
+                console.log(err);
+                return await interaction.reply({content: 'Something went wrong', ephemeral: true});
+            }
         }
-
 }

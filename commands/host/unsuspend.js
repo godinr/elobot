@@ -34,33 +34,39 @@ module.exports = {
             console.log('[CMD - Unsuspend] Timeout cleared');
         }
 
-        const suspendedRole = interaction.guild.roles.cache.find(r => r.name === 'Suspended')
-        const rankedRole = interaction.guild.roles.cache.find(r => r.name === 'Ranked')
+        try {
 
-        const rmSuspendedRole = unsuspendedMember.roles.remove(suspendedRole)
-        const addRankedRoles = unsuspendedMember.roles.add(rankedRole)
+            const suspendedRole = interaction.guild.roles.cache.find(r => r.name === 'Suspended')
+            const rankedRole = interaction.guild.roles.cache.find(r => r.name === 'Ranked')
 
-        const user = await UserSchema.findOne({id: unsuspendedMember.id});
+            const rmSuspendedRole = unsuspendedMember.roles.remove(suspendedRole)
+            const addRankedRoles = unsuspendedMember.roles.add(rankedRole)
 
-        if (!user){
-            return await interaction.reply({content: 'User not found in DB'});
+            const user = await UserSchema.findOne({id: unsuspendedMember.id});
+
+            if (!user){
+                return await interaction.reply({content: 'User not found in DB'});
+            }
+
+            user.suspended = false;
+
+            const res = user.save();
+
+            await Promise.all([rmSuspendedRole, addRankedRoles, res]);
+
+            const suspensionEmbed = new EmbedBuilder()
+                .setColor(color)
+                .setAuthor({ name: 'Player Suspension', iconURL: client.user.displayAvatarURL() })
+                .setTitle(`${unsuspendedMember.user.username} has been unsuspended`)
+                .setDescription('Player is now able to play matches.\n Please avoid further suspensions.')
+                .setTimestamp()
+                .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
+            
+            return await interaction.reply({embeds: [suspensionEmbed]});
+        } catch(err){
+            console.log('[CMD - Unsuspend] | Catch Error')
+            console.log(err);
+            return await interaction.reply({content: 'Something went wrong', ephemeral: true});
         }
-
-        user.suspended = false;
-        user.suspendedTime = 0;
-
-        const res = user.save();
-
-        await Promise.all([rmSuspendedRole, addRankedRoles, res]);
-
-        const suspensionEmbed = new EmbedBuilder()
-            .setColor(color)
-            .setAuthor({ name: 'Player Suspension', iconURL: client.user.displayAvatarURL() })
-            .setTitle(`${unsuspendedMember.user.username} has been unsuspended`)
-            .setDescription('Player is now able to play matches.\n Please avoid further suspensions.')
-            .setTimestamp()
-            .setFooter({text: footer, iconURL: client.user.displayAvatarURL()})
-        
-        return await interaction.reply({embeds: [suspensionEmbed]});
     }
 }

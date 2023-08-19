@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 const MatchSchema = require('./match.schema');
+const SuspensionSchema = require('./suspension.schema');
 
 const UserSchema = new Schema({
     id: String,
@@ -13,7 +14,7 @@ const UserSchema = new Schema({
     kills: Number,
     deaths: Number,
     suspended: Boolean,
-    suspendedTime: Number,
+    suspensions: [SuspensionSchema],
     matches: [MatchSchema]
 });
 

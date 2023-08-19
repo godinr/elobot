@@ -6,8 +6,14 @@ const { numberTimeToText } = require('../../utils/conversion/timeConversion');
 module.exports = {
 
     data: new SlashCommandBuilder()
-        .setName('suspended-players')
-        .setDescription('List all suspended players')
+        .setName('suspensions')
+        .setDescription('List all suspensions for a player')
+        .addUserOption(option => {
+            return option
+                .setName('user')
+                .setDescription('Member you want to see suspensions for')
+                .setRequired(true)
+        })
         .setDefaultMemberPermissions(PermissionsBitField.Flags.MoveMembers),
 
     /**
@@ -19,11 +25,21 @@ module.exports = {
 
         const suspendedMembersEmbed = new EmbedBuilder()
             .setColor(color)
-            .setAuthor({name: 'List of currently suspended players', iconURL: client.user.displayAvatarURL()})
+            .setAuthor({name: 'List of all suspensions for a player', iconURL: client.user.displayAvatarURL()})
             .setTimestamp()
             .setFooter({text: footer, iconURL: client.user.displayAvatarURL()});
         try {
-            const list = await UserSchema.find({suspended: true}).limit(20);
+            const suspendedUser = interaction.options.getUser('user');
+            const suspendedMember = await interaction.guild.members.fetch(suspendedUser.id);
+
+
+            const user = await UserSchema.findOne({id: suspendedUser.id});
+
+            if (!user){
+                return await interaction.reply({content: 'User not found in DB'});
+            }
+
+            const list = user.suspensions;
             
             if (list.length === 0){
                 suspendedMembersEmbed.setDescription("No members currently suspended")
@@ -31,15 +47,14 @@ module.exports = {
             }
 
 
-            suspendedMembersEmbed.setDescription(`Total suspended members: **${list.length}**`)
+            suspendedMembersEmbed.setDescription(`Suspensions for **${suspendedMember.user.username}**\nTotal suspensions: **${list.length}**`)
             
-            let suspension;
 
-            list.forEach((user) => {
-                suspension = user.suspensions[user.suspensions.length-1];
+            list.forEach((suspension, i) => {
+                
                 suspendedMembersEmbed.addFields(
                     { 
-                        name: `${user.username}`, 
+                        name: `${i+1}`, 
                         value: blockQuote(`Suspended for **${numberTimeToText(suspension.suspendedTime)}**\n Suspended on **${suspension.suspendedDate}**\nReason: **${suspension.suspendedReason}**`) 
                     }
                 )
@@ -48,11 +63,9 @@ module.exports = {
 
             return await interaction.reply({embeds: [suspendedMembersEmbed]});
         }catch(err){
-            console.log('[CMD - Suspended-Players] | Catch Error')
+            console.log('[CMD - Suspensions] | Catch Error')
             console.log(err);
+            return await interaction.reply({content: 'Something went wrong', ephemeral: true});
         }
-        
-
-        return await interaction.reply('leaderboard test');
     }
 }

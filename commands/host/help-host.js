@@ -25,6 +25,7 @@ module.exports = {
                 { name: '/suspend @player [duration] [reason]', value: 'Suspend tagged player, player wont be able to join matches until suspension duration has ended'},
                 { name: '/unsuspend @player', value: 'Unsuspend tagged player before the duration ends'},
                 { name: '/suspended-players', value: 'List of players with active suspensions and the duration in seconds.'},
+                { name: '/suspensions @player', value: 'List of all suspensions for a player'},
 
 
             )
