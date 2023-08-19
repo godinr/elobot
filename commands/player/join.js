@@ -42,8 +42,7 @@ module.exports = {
                     losses: 0,
                     kills: 0,
                     deaths: 0,
-                    suspended: false,
-                    suspendedTime: 0
+                    suspended: false
                 })
     
                 const rankedRole = interaction.guild.roles.cache.find(r => r.name === 'Ranked');

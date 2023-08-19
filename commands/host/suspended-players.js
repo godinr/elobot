@@ -26,7 +26,7 @@ module.exports = {
             const list = await UserSchema.find({suspended: true}).limit(20);
             
             if (list.length === 0){
-                suspendedMembersEmbed.setDescription("No members currently suspended")
+                suspendedMembersEmbed.setDescription(`Total suspended members: **${list.length}**`)
                 return interaction.reply({embeds: [suspendedMembersEmbed]});
             }
 

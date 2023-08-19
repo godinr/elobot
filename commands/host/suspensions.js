@@ -42,7 +42,7 @@ module.exports = {
             const list = user.suspensions;
             
             if (list.length === 0){
-                suspendedMembersEmbed.setDescription("No members currently suspended")
+                suspendedMembersEmbed.setDescription(`Suspensions for **${suspendedMember.user.username}**\nTotal suspensions: **${list.length}**`)
                 return interaction.reply({embeds: [suspendedMembersEmbed]});
             }
 
