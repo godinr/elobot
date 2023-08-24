@@ -64,6 +64,10 @@ module.exports = {
                     return await interaction.reply({content: 'Cant suspend yourself', ephemeral: true});
                 }
 
+                if (suspendedMember.permissions.has(PermissionsBitField.Flags.MoveMembers)){
+                    return await interaction.reply({content: 'Cant suspend a staff member', ephemeral: true});
+                }
+
                 if (suspendedMember.permissions.has(PermissionsBitField.Flags.Administrator)) {
                     return await interaction.reply({ content: 'Cant suspend a admin member', ephemeral: true});
                 }
