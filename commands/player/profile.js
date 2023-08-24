@@ -51,10 +51,12 @@ module.exports = {
             }
 
             const kd = (user.deaths === 0)? 0 : (user.kills / user.deaths).toFixed(2);
-
+            const position = await UserSchema.find({rating: {$gt: user.rating}}).countDocuments() + 1;
+            const totalPlayers = await UserSchema.find().countDocuments();
             profileEmbed.addFields(
                 { name: 'Rank', value: user.rank, inline: true},
-                { name: 'Rating', value: String(user.rating), inline: false},
+                { name: 'Rating', value: String(user.rating), inline: true},
+                { name: 'Position', value: `${position}/${totalPlayers}`, inline: true},
                 { name: 'Match', value: String(user.match_played), inline: true},
                 { name: 'Wins', value: String(user.wins), inline: true},
                 { name: 'Losses', value: String(user.losses), inline: true},
