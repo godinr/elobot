@@ -26,6 +26,8 @@ module.exports = {
                 { name: '/unsuspend @player', value: 'Unsuspend tagged player before the duration ends'},
                 { name: '/suspended-players', value: 'List of players with active suspensions and the duration in seconds.'},
                 { name: '/suspensions @player', value: 'List of all suspensions for a player'},
+                { name: '/timeout @player [duration] [reason]', value: 'timeout tagged player, player wont be able to send messages until duration has ended'},
+                { name: '/untimeout @player', value: 'Untimeout tagged player before the duration ends'},
 
 
             )

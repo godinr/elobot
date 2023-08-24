@@ -50,7 +50,7 @@ module.exports = {
                 return await interaction.reply({embeds: [errorEmbed]});
             }
 
-            const kd = (user.deaths === 0)? 0 : (user.kills / user.deaths).toFixed(2);
+            const kd = (user.deaths === 0)? user.kills : (user.kills / user.deaths).toFixed(2);
             const position = await UserSchema.find({rating: {$gt: user.rating}}).countDocuments() + 1;
             const totalPlayers = await UserSchema.find().countDocuments();
             profileEmbed.addFields(
